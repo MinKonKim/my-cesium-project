@@ -19,9 +19,7 @@ import { useMapClick } from "../hooks/useMapClick";
 import { useCamera } from "../hooks/useCamera";
 
 // Cesium Ion 토큰 설정
-Ion.defaultAccessToken =
-  process.env.REACT_APP_CESIUM_ION_TOKEN ||
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJlYWE1OWUxNy1mMWZiLTQxYWYtYjY3MC1jMTQyODBkMjY0YzciLCJpZCI6NTc3MzMsImlhdCI6MTYyMjU0NzQ5Nn0.7d5Wj9a1q0W9v0q0W9v0q0W9v0q0W9v0q0W9v0q0W9v0";
+Ion.defaultAccessToken = process.env.REACT_APP_CESIUM_ION_TOKEN || "";
 
 function Seoul3DMap() {
   const viewerRef = useRef<any>(null);
