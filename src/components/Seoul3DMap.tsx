@@ -1,12 +1,10 @@
 import {
-  Cesium3DTileFeature,
   createWorldTerrainAsync,
   Ion,
   IonResource,
   ScreenSpaceEventType,
-  WebMapTileServiceImageryProvider,
 } from "cesium";
-import { useMemo, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import {
   Cesium3DTileset,
   ImageryLayer,
@@ -15,9 +13,10 @@ import {
   Viewer,
 } from "resium";
 import { MapProvider } from "../context/MapContext";
-
-const VWORLD_KEY =
-  process.env.REACT_APP_VWORLD_KEY || "CB8912F1-3A08-318D-9471-81A04D8D3B38";
+import { SearchWidget } from "./SearchWidget";
+import { useMapLayers } from "../hooks/useMapLayers";
+import { useMapClick } from "../hooks/useMapClick";
+import { useCamera } from "../hooks/useCamera";
 
 // Cesium Ion 토큰 설정
 Ion.defaultAccessToken =
@@ -26,6 +25,12 @@ Ion.defaultAccessToken =
 
 function Seoul3DMap() {
   const viewerRef = useRef<any>(null);
+  const [showSearchWidget, setShowSearchWidget] = useState(true);
+
+  // 커스텀 훅들
+  const { satelliteProvider, hybridProvider } = useMapLayers();
+  const { handleClick } = useMapClick(viewerRef);
+  const { flyToLocation } = useCamera(viewerRef);
 
   // 컴포넌트 언마운트 시 정리
   useEffect(() => {
@@ -36,65 +41,29 @@ function Seoul3DMap() {
     };
   }, []);
 
-  // VWorld 배경지도 (위성 + 하이브리드)
-  const satelliteProvider = useMemo(
-    () =>
-      new WebMapTileServiceImageryProvider({
-        url: `http://api.vworld.kr/req/wmts/1.0.0/${VWORLD_KEY}/Satellite/{TileMatrix}/{TileRow}/{TileCol}.jpeg`,
-        layer: "Satellite",
-        style: "default",
-        format: "image/jpeg",
-        tileMatrixSetID: "EPSG:3857",
-        maximumLevel: 19,
-      }),
-    []
-  );
-  const hybridProvider = useMemo(
-    () =>
-      new WebMapTileServiceImageryProvider({
-        url: `http://api.vworld.kr/req/wmts/1.0.0/${VWORLD_KEY}/Hybrid/{TileMatrix}/{TileRow}/{TileCol}.png`,
-        layer: "Hybrid",
-        style: "default",
-        format: "image/png",
-        tileMatrixSetID: "EPSG:3857",
-        maximumLevel: 19,
-      }),
-    []
-  );
-
-  // 클릭 이벤트 핸들러
-  const handleClick = (e: any) => {
-    if (!viewerRef.current?.cesiumElement) return;
-
-    try {
-      const viewer = viewerRef.current.cesiumElement;
-      if (viewer.isDestroyed()) return;
-
-      const picked = viewer.scene.pick(e.position);
-      if (picked && picked instanceof Cesium3DTileFeature) {
-        const name = picked.getProperty("name");
-        const height = picked.getProperty("height");
-        console.log("Clicked building:", name, "Height:", height);
-        alert(name ? `${name} — 높이: ${height}m` : `높이: ${height}m`);
-      }
-    } catch (error) {
-      console.warn("클릭 이벤트 처리 중 오류:", error);
-    }
-  };
-
   return (
-    <Viewer ref={viewerRef} full terrainProvider={createWorldTerrainAsync()}>
-      <ImageryLayer imageryProvider={satelliteProvider} />
-      <ImageryLayer imageryProvider={hybridProvider} />
-      <Cesium3DTileset url={IonResource.fromAssetId(96188)} />{" "}
-      {/* OSM Buildings */}
-      <ScreenSpaceEventHandler>
-        <ScreenSpaceEvent
-          type={ScreenSpaceEventType.LEFT_CLICK}
-          action={handleClick}
+    <div style={{ position: "relative", width: "100%", height: "100vh" }}>
+      <Viewer ref={viewerRef} full terrainProvider={createWorldTerrainAsync()}>
+        <ImageryLayer imageryProvider={satelliteProvider} />
+        <ImageryLayer imageryProvider={hybridProvider} />
+        <Cesium3DTileset url={IonResource.fromAssetId(96188)} />
+        {/* OSM Buildings */}
+        <ScreenSpaceEventHandler>
+          <ScreenSpaceEvent
+            type={ScreenSpaceEventType.LEFT_CLICK}
+            action={handleClick}
+          />
+        </ScreenSpaceEventHandler>
+      </Viewer>
+
+      {/* 검색 위젯 */}
+      {showSearchWidget && (
+        <SearchWidget
+          onClose={() => setShowSearchWidget(false)}
+          onLocationSelect={flyToLocation}
         />
-      </ScreenSpaceEventHandler>
-    </Viewer>
+      )}
+    </div>
   );
 }
 
