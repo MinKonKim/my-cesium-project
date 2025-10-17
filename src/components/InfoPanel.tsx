@@ -5,7 +5,7 @@ interface InfoPanelProps {
   onClose: () => void;
 }
 
-const InfoPanel: React.FC<InfoPanelProps> = ({ onClose }) => {
+export const InfoPanel: React.FC<InfoPanelProps> = ({ onClose }) => {
   const { state } = useMapContext();
   const { latitude, longitude, altitude } =
     state.clickedLocation || state.currentLocation;
@@ -88,5 +88,3 @@ const InfoPanel: React.FC<InfoPanelProps> = ({ onClose }) => {
     </div>
   );
 };
-
-export default InfoPanel;

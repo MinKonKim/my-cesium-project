@@ -17,6 +17,21 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <!-- Cesium CSS -->
     <link rel="stylesheet" href="%PUBLIC_URL%/cesium/Widgets/widgets.css" />
+    <!-- Cesium 설정 -->
+    <script>
+      window.CESIUM_BASE_URL = "/cesium/";
+      // AMD 모듈 로딩을 위한 설정
+      if (typeof define === "undefined") {
+        window.define = function (deps, factory) {
+          if (typeof factory === "function") {
+            factory();
+          }
+        };
+        window.define.amd = true;
+      }
+    </script>
+    <!-- VWorld API -->
+    <script src="https://map.vworld.kr/js/webglMapInit.js.do?version=2.0&apiKey=CB8912F1-3A08-318D-9471-81A04D8D3B38&domain=localhost:3000"></script>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
