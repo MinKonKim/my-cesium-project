@@ -16,7 +16,8 @@ export const useSearchQuery = () => {
     queryKey: ["search", searchQuery],
     queryFn: () => searchVWorldAPI(searchQuery),
     enabled: searchQuery.trim().length > 0,
-    staleTime: 5 * 60 * 1000, // 5분
+    staleTime: 3 * 1000, // 3초 디바운스
+    gcTime: 5 * 60 * 1000, // 5분 캐시 유지
   });
 
   // 임시 결과 표시 (검색어 입력 중)
