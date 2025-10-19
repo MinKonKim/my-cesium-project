@@ -5,7 +5,7 @@ interface CustomWidgetProps {
   onClose: () => void;
 }
 
-const CustomWidget: React.FC<CustomWidgetProps> = ({ onClose }) => {
+export const CustomWidget: React.FC<CustomWidgetProps> = ({ onClose }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const { state, actions } = useMapContext();
 
@@ -242,5 +242,3 @@ const CustomWidget: React.FC<CustomWidgetProps> = ({ onClose }) => {
     </div>
   );
 };
-
-export default CustomWidget;
