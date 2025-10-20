@@ -7,12 +7,12 @@ interface SearchInputProps {
   isSearching: boolean;
 }
 
-export const SearchInput: React.FC<SearchInputProps> = ({
+export function SearchInput({
   searchQuery,
   onSearchQueryChange,
   onKeyPress,
   isSearching,
-}) => {
+}: SearchInputProps) {
   return (
     <div style={{ marginBottom: "12px" }}>
       <div style={{ display: "flex", gap: "8px" }}>
@@ -60,4 +60,4 @@ export const SearchInput: React.FC<SearchInputProps> = ({
       </div>
     </div>
   );
-};
+}

@@ -4,7 +4,7 @@ interface SearchHeaderProps {
   onClose: () => void;
 }
 
-export const SearchHeader: React.FC<SearchHeaderProps> = ({ onClose }) => {
+export function SearchHeader({ onClose }: SearchHeaderProps) {
   return (
     <div
       style={{
@@ -31,4 +31,4 @@ export const SearchHeader: React.FC<SearchHeaderProps> = ({ onClose }) => {
       </button>
     </div>
   );
-};
+}
