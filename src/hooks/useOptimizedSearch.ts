@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { searchAllTypes } from "../services/parallelSearchService";
+import { SearchResult } from "../../types/api";
 
 export const useOptimizedSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -41,16 +42,27 @@ export const useOptimizedSearch = () => {
   }, [searchResults, activeTab, searchQuery]);
 
   // 임시 결과 표시 (검색어 입력 중)
-  const tempResults =
+  const tempResults: SearchResult[] =
     searchQuery.trim() && searchResults?.total === 0 && isSearching
       ? [
           {
-            zipcode: "",
-            name: `${searchQuery} 검색 중...`,
-            address: "검색 결과를 불러오는 중입니다",
-            x: 0,
-            y: 0,
-            type: "loading",
+            id: "loading",
+            title: `${searchQuery} 검색 중...`,
+            district: "",
+            category: "",
+            geometry: "",
+            address: {
+              zipcode: "",
+              road: "검색 결과를 불러오는 중입니다",
+              parcel: "",
+              category: "",
+              bldnm: "",
+              bldnmdc: "",
+            },
+            point: {
+              x: "0",
+              y: "0",
+            },
           },
         ]
       : [];

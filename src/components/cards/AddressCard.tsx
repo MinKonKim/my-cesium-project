@@ -1,8 +1,9 @@
 import React from "react";
+import { SearchResult } from "../../../types/api";
 
 interface AddressCardProps {
-  result: any;
-  onClick: (result: any) => void;
+  result: SearchResult;
+  onClick: (result: SearchResult) => void;
 }
 
 export function AddressCard({ result, onClick }: AddressCardProps) {
@@ -48,14 +49,14 @@ export function AddressCard({ result, onClick }: AddressCardProps) {
       <div
         style={{ fontWeight: "bold", marginBottom: "4px", fontSize: "14px" }}
       >
-        {result.name || "알 수 없는 주소"}
+        {result.title || "알 수 없는 주소"}
       </div>
       <div style={{ fontSize: "12px", color: "#666", marginBottom: "4px" }}>
-        {result.address || "주소 정보 없음"}
+        {result.address?.road || result.address?.parcel || "주소 정보 없음"}
       </div>
-      {result.zipcode && (
+      {result.address?.zipcode && (
         <div style={{ fontSize: "10px", color: "#999" }}>
-          우편번호: {result.zipcode}
+          우편번호: {result.address.zipcode}
         </div>
       )}
     </div>

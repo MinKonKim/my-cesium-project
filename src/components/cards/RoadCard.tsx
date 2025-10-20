@@ -1,8 +1,9 @@
 import React from "react";
+import { SearchResult } from "../../../types/api";
 
 interface RoadCardProps {
-  result: any;
-  onClick: (result: any) => void;
+  result: SearchResult;
+  onClick: (result: SearchResult) => void;
 }
 
 export function RoadCard({ result, onClick }: RoadCardProps) {
@@ -48,14 +49,14 @@ export function RoadCard({ result, onClick }: RoadCardProps) {
       <div
         style={{ fontWeight: "bold", marginBottom: "4px", fontSize: "14px" }}
       >
-        {result.name || "알 수 없는 도로"}
+        {result.title || "알 수 없는 도로"}
       </div>
       <div style={{ fontSize: "12px", color: "#666", marginBottom: "4px" }}>
-        {result.address || "주소 정보 없음"}
+        {result.address?.road || result.address?.parcel || "주소 정보 없음"}
       </div>
-      {result.roadType && (
+      {result.category && (
         <div style={{ fontSize: "10px", color: "#999" }}>
-          도로 유형: {result.roadType}
+          도로 유형: {result.category}
         </div>
       )}
     </div>

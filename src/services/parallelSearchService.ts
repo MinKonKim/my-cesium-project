@@ -1,5 +1,6 @@
-const VWORLD_KEY =
-  process.env.REACT_APP_VWORLD_KEY || "CB8912F1-3A08-318D-9471-81A04D8D3B38";
+import { SearchResult, VWorldSearchResponse } from "../../types/api";
+
+const VWORLD_KEY: string = process.env.REACT_APP_VWORLD_KEY as string;
 
 // 개별 검색 API 호출
 const searchVWorldAPI = async (
@@ -7,7 +8,7 @@ const searchVWorldAPI = async (
   type: string,
   page: number = 1,
   size: number = 10
-): Promise<any[]> => {
+): Promise<SearchResult[]> => {
   const url = `/vworld/req/search?service=search&request=search&version=2.0&type=${type}&format=json&errorformat=json&crs=EPSG:4326&page=${page}&size=${size}&query=${encodeURIComponent(
     query
   )}&key=${VWORLD_KEY}`;
@@ -20,25 +21,42 @@ const searchVWorldAPI = async (
     }
 
     const responseText = await response.text();
-    const data = JSON.parse(responseText);
+    const data: VWorldSearchResponse = JSON.parse(responseText);
 
     if (data.response && data.response.result && data.response.result.items) {
-      const results = data.response.result.items.map((item: any) => ({
-        zipcode: item.address?.zipcode || "",
-        name: item.address?.bldnm || item.address?.road || "알 수 없는 장소",
-        address: item.address?.road || item.address?.parcel || "",
-        x: parseFloat(item.point?.x || 0),
-        y: parseFloat(item.point?.y || 0),
-        type: type, // 검색 타입 추가
-      }));
-
-      // address 기준으로 중복 제거
-      const uniqueResults = results.filter(
-        (item: any, index: number, self: any[]) =>
-          index === self.findIndex((t) => t.address === item.address)
+      // API 응답에서 개별 아이템들을 추출하여 SearchResult[] 형태로 반환
+      const searchItems: SearchResult[] = data.response.result.items.map(
+        (item: any) => ({
+          id: item.id,
+          title: item.title,
+          geometry: item.geometry,
+          point: {
+            x: item.point.x, // 문자열로 유지
+            y: item.point.y, // 문자열로 유지
+          },
+          // 타입별 추가 필드들
+          district: item.district,
+          category: item.category,
+          address: item.address
+            ? {
+                zipcode: item.address.zipcode,
+                road: item.address.road,
+                parcel: item.address.parcel,
+                category: item.address.category,
+                bldnm: item.address.bldnm,
+                bldnmdc: item.address.bldnmdc,
+              }
+            : undefined,
+        })
       );
 
-      return uniqueResults;
+      // title 기준으로 중복 제거
+      const uniqueItems = searchItems.filter(
+        (item: SearchResult, index: number, self: SearchResult[]) =>
+          index === self.findIndex((t) => t.title === item.title)
+      );
+
+      return uniqueItems;
     }
 
     return [];

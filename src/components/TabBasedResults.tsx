@@ -1,19 +1,20 @@
 import React from "react";
 import { PlaceCard, RoadCard, DistrictCard, AddressCard } from "./cards";
+import { SearchResult } from "../../types/api";
 
 interface TabBasedResultsProps {
   searchResults:
     | {
-        place: any[];
-        road: any[];
-        district: any[];
-        address: any[];
+        place: SearchResult[];
+        road: SearchResult[];
+        district: SearchResult[];
+        address: SearchResult[];
         total: number;
       }
     | undefined;
-  tempResults: any[];
+  tempResults: SearchResult[];
   activeTab: string;
-  onResultClick: (result: any) => void;
+  onResultClick: (result: SearchResult) => void;
   isSearching: boolean;
   onTabChange?: (tab: string) => void;
 }
@@ -61,7 +62,7 @@ export function TabBasedResults({
           key={index}
           style={{ padding: "12px", textAlign: "center", color: "#666" }}
         >
-          {result.name}
+          {result.title}
         </div>
       ));
     }

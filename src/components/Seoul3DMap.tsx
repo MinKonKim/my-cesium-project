@@ -13,7 +13,7 @@ import {
   Viewer,
 } from "resium";
 import { MapProvider } from "../context/MapContext";
-import { SearchWidget } from "./SearchWidget";
+import { SearchWidget } from "./search/SearchWidget";
 import { useMapLayers } from "../hooks/useMapLayers";
 import { useMapClick } from "../hooks/useMapClick";
 import { useCamera } from "../hooks/useCamera";
@@ -32,9 +32,10 @@ function Seoul3DMap() {
 
   // 컴포넌트 언마운트 시 정리
   useEffect(() => {
+    const viewer = viewerRef.current;
     return () => {
-      if (viewerRef.current?.cesiumElement) {
-        viewerRef.current.cesiumElement.destroy();
+      if (viewer?.cesiumElement) {
+        viewer.cesiumElement.destroy();
       }
     };
   }, []);

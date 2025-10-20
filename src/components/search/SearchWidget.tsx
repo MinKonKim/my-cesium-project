@@ -1,8 +1,9 @@
 import React from "react";
-import { useOptimizedSearch } from "../hooks/useOptimizedSearch";
+import { useOptimizedSearch } from "../../hooks/useOptimizedSearch";
 import { SearchHeader } from "./SearchHeader";
 import { SearchInput } from "./SearchInput";
-import { TabBasedResults } from "./TabBasedResults";
+import { TabBasedResults } from "../TabBasedResults";
+import { SearchResult } from "../../../types/api";
 
 interface SearchWidgetProps {
   onClose: () => void;
@@ -27,9 +28,13 @@ export function SearchWidget({ onClose, onLocationSelect }: SearchWidgetProps) {
     }
   };
 
-  const handleResultClick = (result: any) => {
-    if (onLocationSelect && result.x !== 0 && result.y !== 0) {
-      onLocationSelect(result.x, result.y, result.name);
+  const handleResultClick = (result: SearchResult) => {
+    if (onLocationSelect && result.point.x !== "0" && result.point.y !== "0") {
+      onLocationSelect(
+        parseFloat(result.point.x),
+        parseFloat(result.point.y),
+        result.title || "알 수 없는 장소"
+      );
     }
   };
 

@@ -1,10 +1,10 @@
 // 메인 컴포넌트
-export * from "./SearchWidget";
+export * from "./search/SearchWidget";
 export * from "./TabBasedResults";
 
 // 서브 컴포넌트
-export * from "./SearchHeader";
-export * from "./SearchInput";
+export * from "./search/SearchHeader";
+export * from "./search/SearchInput";
 
 // 카드 컴포넌트
 export * from "./cards";

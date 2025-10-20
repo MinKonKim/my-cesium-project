@@ -1,8 +1,9 @@
 import React from "react";
+import { SearchResult } from "../../../types/api";
 
 interface DistrictCardProps {
-  result: any;
-  onClick: (result: any) => void;
+  result: SearchResult;
+  onClick: (result: SearchResult) => void;
 }
 
 export function DistrictCard({ result, onClick }: DistrictCardProps) {
@@ -48,14 +49,14 @@ export function DistrictCard({ result, onClick }: DistrictCardProps) {
       <div
         style={{ fontWeight: "bold", marginBottom: "4px", fontSize: "14px" }}
       >
-        {result.name || "알 수 없는 행정구역"}
+        {result.title || "알 수 없는 행정구역"}
       </div>
       <div style={{ fontSize: "12px", color: "#666", marginBottom: "4px" }}>
-        {result.address || "주소 정보 없음"}
+        {result.address?.road || result.address?.parcel || "주소 정보 없음"}
       </div>
-      {result.districtType && (
+      {result.district && (
         <div style={{ fontSize: "10px", color: "#999" }}>
-          구역 유형: {result.districtType}
+          행정구역: {result.district}
         </div>
       )}
     </div>

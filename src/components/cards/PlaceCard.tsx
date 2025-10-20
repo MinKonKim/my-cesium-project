@@ -1,8 +1,9 @@
 import React from "react";
+import { SearchResult } from "../../../types/api";
 
 interface PlaceCardProps {
-  result: any;
-  onClick: (result: any) => void;
+  result: SearchResult;
+  onClick: (result: SearchResult) => void;
 }
 
 export function PlaceCard({ result, onClick }: PlaceCardProps) {
@@ -48,10 +49,10 @@ export function PlaceCard({ result, onClick }: PlaceCardProps) {
       <div
         style={{ fontWeight: "bold", marginBottom: "4px", fontSize: "14px" }}
       >
-        {result.name || "알 수 없는 장소"}
+        {result.title || "알 수 없는 장소"}
       </div>
       <div style={{ fontSize: "12px", color: "#666", marginBottom: "4px" }}>
-        {result.address || "주소 정보 없음"}
+        {result.address?.road || result.address?.parcel || "주소 정보 없음"}
       </div>
       {result.category && (
         <div style={{ fontSize: "10px", color: "#999" }}>
