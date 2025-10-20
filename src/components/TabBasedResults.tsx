@@ -27,18 +27,6 @@ export function TabBasedResults({
   isSearching,
   onTabChange,
 }: TabBasedResultsProps) {
-  // 탭별 데이터 디버깅
-  React.useEffect(() => {
-    if (searchResults) {
-      console.log("🎯 TabBasedResults - 탭별 데이터:", {
-        activeTab,
-        placeData: searchResults.place,
-        roadData: searchResults.road,
-        districtData: searchResults.district,
-        addressData: searchResults.address,
-      });
-    }
-  }, [searchResults, activeTab]);
   const tabs = [
     { key: "all", label: "전체", count: searchResults?.total || 0 },
     { key: "place", label: "장소", count: searchResults?.place?.length || 0 },

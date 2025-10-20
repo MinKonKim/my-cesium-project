@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { searchAllTypes } from "../services/parallelSearchService";
 import { SearchResult } from "../../types/api";
+import { useDebounce } from "./useDebounce";
 
 export const useOptimizedSearch = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
-
+  const debouncedSearchQuery = useDebounce(searchQuery, 500);
   // 활성 탭에 따라 필요한 API만 호출하는 조건 설정
   const shouldFetchPlace = activeTab === "all" || activeTab === "place";
   const shouldFetchRoad = activeTab === "all" || activeTab === "road";
@@ -19,27 +20,29 @@ export const useOptimizedSearch = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["optimizedSearch", searchQuery, activeTab],
-    queryFn: () => searchAllTypes(searchQuery),
-    enabled: searchQuery.trim().length > 0,
+    queryKey: ["optimizedSearch", debouncedSearchQuery, activeTab],
+    queryFn: () => searchAllTypes(debouncedSearchQuery),
+    enabled: debouncedSearchQuery.trim().length > 0,
     staleTime: 3 * 1000, // 3초 디바운스
     gcTime: 5 * 60 * 1000, // 5분 캐시 유지
   });
 
-  // API 호출 결과 디버깅
+  // React Query를 통한 API 호출 결과만 콘솔에 표시
   React.useEffect(() => {
     if (searchResults) {
-      console.log("🔍 useOptimizedSearch - API 호출 결과:", {
+      console.log("🔍 React Query API 호출 결과:", {
+        query: debouncedSearchQuery,
         activeTab,
-        searchQuery,
-        place: searchResults.place,
-        road: searchResults.road,
-        district: searchResults.district,
-        address: searchResults.address,
-        total: searchResults.total,
+        results: {
+          place: searchResults.place?.length || 0,
+          road: searchResults.road?.length || 0,
+          district: searchResults.district?.length || 0,
+          address: searchResults.address?.length || 0,
+          total: searchResults.total,
+        },
       });
     }
-  }, [searchResults, activeTab, searchQuery]);
+  }, [searchResults, activeTab, debouncedSearchQuery]);
 
   // 임시 결과 표시 (검색어 입력 중)
   const tempResults: SearchResult[] =

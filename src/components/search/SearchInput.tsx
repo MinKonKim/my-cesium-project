@@ -13,13 +13,17 @@ export function SearchInput({
   onKeyPress,
   isSearching,
 }: SearchInputProps) {
+  const handleSearchQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onSearchQueryChange(e.target.value);
+  };
+
   return (
     <div style={{ marginBottom: "12px" }}>
       <div style={{ display: "flex", gap: "8px" }}>
         <input
           type="text"
           value={searchQuery}
-          onChange={(e) => onSearchQueryChange(e.target.value)}
+          onChange={handleSearchQueryChange}
           onKeyPress={onKeyPress}
           placeholder="주소를 입력하세요 (예: 서울시 강남구)"
           style={{

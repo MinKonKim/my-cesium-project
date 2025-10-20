@@ -68,7 +68,7 @@ const searchVWorldAPI = async (
 
 // 병렬 검색 실행
 export const searchAllTypes = async (query: string) => {
-  console.log(`🔍 병렬 검색 시작: "${query}"`);
+  console.log(`🔍 React Query - 병렬 검색 시작: "${query}"`);
 
   try {
     const [placeResults, roadResults, districtResults, addressResults] =
@@ -85,7 +85,8 @@ export const searchAllTypes = async (query: string) => {
       districtResults.length +
       addressResults.length;
 
-    console.log(`📊 병렬 검색 완료:`, {
+    console.log(`📊 React Query - 병렬 검색 완료:`, {
+      query,
       place: placeResults.length,
       road: roadResults.length,
       district: districtResults.length,

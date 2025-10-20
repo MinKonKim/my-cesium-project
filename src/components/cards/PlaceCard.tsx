@@ -7,11 +7,6 @@ interface PlaceCardProps {
 }
 
 export function PlaceCard({ result, onClick }: PlaceCardProps) {
-  // 장소 데이터 디버깅
-  React.useEffect(() => {
-    console.log("🏢 PlaceCard - 장소 데이터:", result);
-  }, [result]);
-
   return (
     <div
       onClick={() => onClick(result)}

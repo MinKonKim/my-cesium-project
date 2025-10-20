@@ -7,11 +7,6 @@ interface AddressCardProps {
 }
 
 export function AddressCard({ result, onClick }: AddressCardProps) {
-  // 주소 데이터 디버깅
-  React.useEffect(() => {
-    console.log("📍 AddressCard - 주소 데이터:", result);
-  }, [result]);
-
   return (
     <div
       onClick={() => onClick(result)}

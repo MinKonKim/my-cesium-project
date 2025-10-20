@@ -7,11 +7,6 @@ interface RoadCardProps {
 }
 
 export function RoadCard({ result, onClick }: RoadCardProps) {
-  // 도로 데이터 디버깅
-  React.useEffect(() => {
-    console.log("🛣️ RoadCard - 도로 데이터:", result);
-  }, [result]);
-
   return (
     <div
       onClick={() => onClick(result)}

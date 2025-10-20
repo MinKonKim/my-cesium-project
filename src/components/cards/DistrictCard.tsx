@@ -7,11 +7,6 @@ interface DistrictCardProps {
 }
 
 export function DistrictCard({ result, onClick }: DistrictCardProps) {
-  // 행정구역 데이터 디버깅
-  React.useEffect(() => {
-    console.log("🏛️ DistrictCard - 행정구역 데이터:", result);
-  }, [result]);
-
   return (
     <div
       onClick={() => onClick(result)}
